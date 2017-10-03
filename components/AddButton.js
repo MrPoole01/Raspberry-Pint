@@ -10,13 +10,15 @@ export default class AddButton extends Component {
     this.state = {
       addKegNewBeerModal: false,
       addKegExistingBeerModal: false,
+      bierhoffModal: false,
       selected1: undefined,
       name: '',
       description: '',
       servingtemp: '',
       photo: '',
-      beers:props.beers,
-      active: false
+      active: false,
+      exist: false,
+      beer_id: 0
     }
   }
 
@@ -29,9 +31,10 @@ export default class AddButton extends Component {
     this.setState({addKegExistingBeerModal: true});
   }
 
-  onValueChange(value: string) {
+  onValueChange(value: number, label: string) {
     this.setState({
-      selected1: value
+      selected1: label,
+      beer_id: value
     });
   }
 
@@ -42,6 +45,7 @@ export default class AddButton extends Component {
       servingtemp: this.state.servingtemp,
       photo: this.state.photo
     }
+    this.props.newBeer(body)
     fetch('https://raspberry-pint-api.herokuapp.com/beers', {
       method: 'POST',
       headers: {
@@ -55,7 +59,59 @@ export default class AddButton extends Component {
         photo: body.photo
       })
     })
+      .then(response => {
+        this.setState({beer_id: JSON.parse(response._bodyText)[0].id,
+                       addKegNewBeerModal:false,
+                       bierhoffModal: true,
+                       name: '',
+                       description: '',
+                       servingtemp: '',
+                       photo: '',
+                       exist: false
+                       })
+    })
   }
+
+  postKeg(id,size) {
+    this.setState({bierhoffModal: false, addKegExistingBeerModal: false});
+    const data = {
+    "temperature": '0',
+    "keg_size_liters": size,
+    "liters_used": 0,
+    "beer_id": id
+    }
+    let settings = {};
+    if(this.state.exist){
+      settings = {
+        method : 'POST',
+        headers : {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      }
+    } else {
+      settings = {
+        method : 'PATCH',
+        headers : {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      }
+    }
+
+    console.log(this.state.exist,this.state.beer_id);
+
+    // if(this.state.exist){
+    //   fetch('https://raspberry-pint-api.herokuapp.com/kegs', settings)
+    // } else {
+    //   fetch('https://raspberry-pint-api.herokuapp.com/kegs', settings)
+    // }
+
+  }
+
+
 
 
 
@@ -110,7 +166,7 @@ export default class AddButton extends Component {
           </Form>
 
             <Button onPress={() => {
-              this.setState({ addKegNewBeerModal: !this.state.addKegNewBeerModal })
+              this.setState({ addKegNewBeerModal: !this.state.addKegNewBeerModal, exist: false })
             }} style={{ backgroundColor: '#3B5998', paddingLeft: 20, paddingRight: 20, marginTop: 100, alignSelf: "center" }}>
               <Text style={{color: 'white', textAlign: 'center'}}>Close</Text>
             </Button>
@@ -118,9 +174,32 @@ export default class AddButton extends Component {
 
 
               <Button onPress={() => this.postBeer()} style={{ backgroundColor: '#3B5998', paddingLeft: 20, paddingRight: 20, marginTop: 10, alignSelf: "center" }}>
-                <Text style={{color: 'white', textAlign: 'center'}}>Submit</Text>
+                <Text style={{color: 'white', textAlign: 'center'}}>Cheers!</Text>
               </Button>
 
+
+          </View>
+         </View>
+        </Modal>
+
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.bierhoffModal}
+          onRequestClose={() => {alert("Modal has been closed.")}}
+          >
+         <View style={{marginTop: 22}}>
+          <View>
+          <Form>
+
+            <Button block light onPress={() => this.postKeg(this.state.beer_id,62)} >
+              <Text>62 Pints</Text>
+            </Button>
+            <Button block onPress={() => this.postKeg(this.state.beer_id,124)} >
+              <Text>124 Pints</Text>
+            </Button>
+
+          </Form>
 
           </View>
          </View>
@@ -156,9 +235,9 @@ export default class AddButton extends Component {
           </Form>
 
             <Button onPress={() => {
-              this.setState({ addKegExistingBeerModal: !this.state.addKegExistingBeerModal })
+              this.setState({ exist: true, bierhoffModal: !this.state.bierhoffModal, addKegExistingBeerModal: !this.state.addKegExistingBeerModal })
             }} style={{ backgroundColor: '#3B5998', paddingLeft: 20, paddingRight: 20, marginTop: 100, alignSelf: "center" }}>
-              <Text style={{color: 'white', textAlign: 'center'}}>Close</Text>
+              <Text style={{color: 'white', textAlign: 'center'}}>Cheers!</Text>
             </Button>
 
           </View>
