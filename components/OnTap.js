@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image } from 'react-native';
-import { Container, View, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
-import KegList from './KegList'
+import { StyleSheet, Image, View } from 'react-native';
+import { Container, Header, Footer, FooterTab, Content, Card, Modal, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
+import KegList  from './KegList'
 import AddButton from './AddButton'
 const baseURL = 'https://raspberry-pint-api.herokuapp.com'
 
@@ -13,22 +13,44 @@ const baseURL = 'https://raspberry-pint-api.herokuapp.com'
      active: false,
      kegAndBeer: []
    }
+   this.newBeer = this.newBeer.bind(this);
  }
-
-
 
    async componentDidMount(){
      const kegAndBeerResponse = await fetch(`${baseURL}/keg-and-beer`)
      const kegAndBeerJSON  = await kegAndBeerResponse.json()
      this.setState({kegAndBeer: kegAndBeerJSON})
-     console.log(this.state.kegAndBeer);
    }
 
+ newBeer (newBeer) {
+   console.log(newBeer);
+   let beer = this.state.kegAndBeer
+   beer.push(newBeer)
+   this.setState({kegAndBeer: beer})
+ }
  setCurrentReadOffset = (event) => {
    let itemHeight = 402;
    let currentOffset = Math.floor(event.nativeEvent.contentOffset.y);
    let currentItemIndex = Math.ceil(currentOffset / itemHeight);
-   // this.state.dataset.setReadOffset(currentItemIndex);
+ }
+
+ deleteKeg(id) {
+   let newKegandBeer = this.state.kegAndBeer.filter(keg => {
+     return keg.id != id
+   })
+   fetch('https://raspberry-pint-api.herokuapp.com/kegs-by-id/' + id, {
+     method: 'DELETE',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+     },
+     body: JSON.stringify({
+       id: this.props.KegID
+     })
+   })
+   .then(response => {
+     this.setState({kegAndBeer: newKegandBeer})
+   })
  }
 
 
@@ -37,10 +59,10 @@ const baseURL = 'https://raspberry-pint-api.herokuapp.com'
      <Container>
        <Content scrollEventThrottle={300} onScroll={this.setCurrentReadOffset}>
            {this.state.kegAndBeer.map(kegWithItsBeer => {
-               return(<KegList key={kegWithItsBeer.id} BeerID={kegWithItsBeer.beer_id} BeerDescription={kegWithItsBeer.description} KegID={kegWithItsBeer.id} KegSizeLiters={kegWithItsBeer.keg_size_liters} litersUsed={kegWithItsBeer.liters_used} beerName={kegWithItsBeer.name} beerPhoto={kegWithItsBeer.photo}  servingTemp={kegWithItsBeer.serving_temp}  kegTemp={kegWithItsBeer.kegTemp}/>);
+               return(<KegList deleteKeg={this.deleteKeg.bind(this)} key={kegWithItsBeer.id} BeerID={kegWithItsBeer.beer_id} BeerDescription={kegWithItsBeer.description} KegID={kegWithItsBeer.id} KegSizeLiters={kegWithItsBeer.keg_size_liters} litersUsed={kegWithItsBeer.liters_used} beerName={kegWithItsBeer.name} beerPhoto={kegWithItsBeer.photo}  servingTemp={kegWithItsBeer.serving_temp}  kegTemp={kegWithItsBeer.temperature}/>);
            })}
        </Content>
-      <AddButton beers={this.props.beers}/>
+      <AddButton beers={this.props.beers} newBeer={this.newBeer}/>
     </Container>
    );
  }

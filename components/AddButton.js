@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image, ScrollView, StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
+import { Image, StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
 import { Content, Fab, Icon, Button, Item, Input, Picker, Form, Right } from 'native-base';
 import { Alert, TextInput } from 'react-native';
 

@@ -21,7 +21,6 @@ import {
 export default class KegStatus extends Component {
   render() {
     return (
-      <Container>
 
         <Content>
         <Card style={{flex: 1}}>
@@ -40,22 +39,23 @@ export default class KegStatus extends Component {
               <Image
                 source={{uri: 'https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.brewpalacekegbot.com%2Fstatic%2Fimages%2Fkeg%2Ffull%2Fkeg-srm14-3.png&f=1'}}
                 style={styles.image}/>
-              <Text>
-                //Your text here
-              </Text>
+                <Text>KegSizeLiters: {this.props.KegSizeLiters}</Text>
+                <Text>litersUsed: {this.props.litersUsed}</Text>
+                <Text>kegTemp: {this.props.kegTemp}</Text>
             </Body>
           </CardItem>
 
-          <CardItem>
-            <Left>
-              <Button transparent textStyle={{color: '#87838B'}}>
-                <Icon name="beer" />
-                <Text>1,926 stars</Text>
-              </Button>
-            </Left>
-          </CardItem>
-        </Card>
+            <CardItem>
+              <Left>
+                <Button transparent textStyle={{color: '#87838B'}}>
+                  <Icon name="beer" />
+                  <Text>1,926 stars</Text>
+                </Button>
+              </Left>
+            </CardItem>
+          </Card>
         </Content>
+
 
     );
   }
@@ -63,28 +63,15 @@ export default class KegStatus extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
   },
-  header: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
-  },
   image: {
-    // flexGrow:1,
+
     height:200,
     width: 200,
-    marginLeft: 40,
+    marginLeft: 80,
     marginTop: 20,
-    // width:null,
-  },
-  paragraph: {
-    textAlign: 'center',
-  },
-  text: {
-    color: '#ffffff'
-  },
-  background: {
-    backgroundColor: '#000'
   }
 });

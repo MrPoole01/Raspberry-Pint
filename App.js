@@ -1,23 +1,23 @@
-
 import React, { Component } from 'react';
-import {StyleSheet, Image} from 'react-native'
+import {StyleSheet, Image, View} from 'react-native'
 import { Container, Title, Content, FooterTab, Footer, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import Header from './components/Header';
 import Main from './components/Main'
 import OnTap from './components/OnTap'
 import Contact from './components/Contact'
+import KegList from './components/KegList'
+import Expo from 'expo';
 
 const brewsURL = 'https://raspberry-pint-api.herokuapp.com'
 
-export default class App extends React.Component {
+export default class App extends Component {
 
   constructor() {
     super()
     this.state = {
       index: 0,
       beers: [],
-
      };
   }
 
@@ -34,6 +34,9 @@ export default class App extends React.Component {
 
     Expo.Font.loadAsync({
     'Roboto_medium': require('./assets/fonts/Roboto_medium.ttf'),
+     Roboto: require("native-base/Fonts/Roboto.ttf"),
+     Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+     Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
   });
 }
 
@@ -78,6 +81,6 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#04172d'
+    backgroundColor: '#d4ab1d'
   },
 });

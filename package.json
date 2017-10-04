@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "react-native-scripts": "1.3.1",
-    "jest-expo": "~20.0.0",
+    "jest-expo": "~21.0.0",
     "react-test-renderer": "16.0.0-alpha.12"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
@@ -19,10 +19,20 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+<<<<<<< HEAD
     "expo": "^21.0.0",
     "native-base": "^2.3.2",
     "react": "16.0.0-alpha.12",
     "react-native": "^0.48.4",
     "react-native-animatable": "^1.2.4"
+=======
+    "expo": "^21.0.2",
+    "native-base": "^2.3.2",
+    "react": "16.0.0-alpha.12",
+    "react-native": "^0.48.4",
+    "react-native-animatable": "^1.2.4",
+    "react-native-svg": "^5.4.1",
+    "react-navigation": "^1.0.0-beta.11"
+>>>>>>> 7139abefd100d40d3b26df45b76136a0d2905310
   }
 }
